@@ -57,7 +57,7 @@ public class ClienteController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping
+    @GetMapping //api/v1/clientes?pagina=1&tamanho=10&ordem=nome
     public ResponseEntity<Page<ClienteDetalhesDTO>> buscarTodos(Pageable pageable) {
         Page<Cliente> clientes = service.buscarTodos(pageable);
 
