@@ -40,4 +40,11 @@ public class ClienteController {
 
         return ResponseEntity.ok(mapper.toDetalhesDTO(cliente));
     }
+
+    @GetMapping("{id}")
+    public ResponseEntity<ClienteDetalhesDTO> buscarPorId(@PathVariable Long id) {
+        Cliente cliente = service.buscarPorid(id);
+
+        return ResponseEntity.ok(mapper.toDetalhesDTO(cliente));
+    }
 }
