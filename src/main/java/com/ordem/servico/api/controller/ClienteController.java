@@ -47,4 +47,11 @@ public class ClienteController {
 
         return ResponseEntity.ok(mapper.toDetalhesDTO(cliente));
     }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<?> excluirPorId(@PathVariable Long id) {
+        service.excluirPorId(id);
+
+        return ResponseEntity.noContent().build();
+    }
 }
