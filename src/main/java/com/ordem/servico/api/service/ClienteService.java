@@ -2,6 +2,7 @@ package com.ordem.servico.api.service;
 
 import com.ordem.servico.api.model.Cliente;
 import com.ordem.servico.api.repository.ClienteRepository;
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,7 +17,12 @@ public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
 
-    public Cliente cadastrar(Cliente cliente){
+    public Cliente cadastrar(Cliente cliente) {
+
+        if (clinteExiste(cliente.getDocumento())) {
+            throw new EntityExistsException("Cliente já cadastrado com documento " + cliente.getDocumento());
+        }
+
         cliente.setDataCadastro(LocalDateTime.now());
 
         return clienteRepository.save(cliente);
@@ -48,5 +54,9 @@ public class ClienteService {
 
     public Page<Cliente> buscarTodos(Pageable pageable) {
         return clienteRepository.findAll(pageable);
+    }
+
+    public boolean clinteExiste(String documento) {
+        return clienteRepository.existsByDocumento(documento);
     }
 }
