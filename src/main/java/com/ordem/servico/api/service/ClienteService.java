@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class ClienteService {
@@ -19,8 +20,9 @@ public class ClienteService {
 
     public Cliente cadastrar(Cliente cliente) {
 
-        if (clinteExiste(cliente.getDocumento())) {
-            throw new EntityExistsException("Cliente já cadastrado com documento " + cliente.getDocumento());
+        if (verificarClienteExiste(cliente)) {
+            throw new EntityExistsException("Já existe um Cliente cadastrado com o documento "
+                    + cliente.getDocumento());
         }
 
         cliente.setDataCadastro(LocalDateTime.now());
@@ -28,9 +30,13 @@ public class ClienteService {
         return clienteRepository.save(cliente);
     }
 
-    public Cliente atualizar(Cliente cliente){
+    public Cliente atualizar(Cliente cliente) {
         Cliente clienteAtual = clienteRepository.findById(cliente.getId())
                 .orElseThrow(EntityNotFoundException::new);
+
+        if (verificarClienteExiste(cliente)) {
+            throw new EntityExistsException("Documento já utilizado por outro Cliente");
+        }
 
         clienteAtual.setNome(cliente.getNome());
         clienteAtual.setDocumento(cliente.getDocumento());
@@ -56,7 +62,11 @@ public class ClienteService {
         return clienteRepository.findAll(pageable);
     }
 
-    public boolean clinteExiste(String documento) {
-        return clienteRepository.existsByDocumento(documento);
+    public boolean verificarClienteExiste(Cliente cliente) {
+        Optional<Cliente> clienteEncontrado = clienteRepository.findByDocumento(cliente.getDocumento());
+        if (clienteEncontrado.isPresent() && !clienteEncontrado.get().getId().equals(cliente.getId())) {
+            return true;
+        }
+        return false;
     }
 }

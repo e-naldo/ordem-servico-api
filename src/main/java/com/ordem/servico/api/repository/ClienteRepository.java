@@ -5,9 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ClienteRepository extends JpaRepository<Cliente, Long> {
+import java.util.Optional;
 
+public interface ClienteRepository extends JpaRepository<Cliente, Long> {
     Page<Cliente> findAll(Pageable pageable);
 
-    boolean existsByDocumento(String documento);
+    Optional<Cliente> findByDocumento(String documento);
 }
