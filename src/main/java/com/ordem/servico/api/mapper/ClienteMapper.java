@@ -1,6 +1,6 @@
 package com.ordem.servico.api.mapper;
 
-import com.ordem.servico.api.dto.ClienteAlteracaoDTO;
+import com.ordem.servico.api.dto.ClienteAtualizacaoDTO;
 import com.ordem.servico.api.dto.ClienteCadastroDTO;
 import com.ordem.servico.api.dto.ClienteDetalhesDTO;
 import com.ordem.servico.api.model.Cliente;
@@ -17,7 +17,7 @@ public class ClienteMapper {
                 dto.telefone());
     }
 
-    public Cliente toEntidade(ClienteAlteracaoDTO dto) {
+    public Cliente toEntidade(ClienteAtualizacaoDTO dto) {
         return new Cliente(
                 dto.id(),
                 dto.nome(),
