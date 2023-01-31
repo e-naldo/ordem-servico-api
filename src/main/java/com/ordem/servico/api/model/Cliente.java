@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @Entity
-public class Cliente extends EntidadeBase{
+public class Cliente extends EntidadeBase {
 
     private String nome;
     private String documento;
@@ -22,4 +22,19 @@ public class Cliente extends EntidadeBase{
     private LocalDateTime dataCadastro;
     @Column(name = "data_atualizacao")
     private LocalDateTime dataAtualizacao;
+
+    public Cliente(String nome, String documento, String email, String telefone) {
+        this.nome = nome;
+        this.documento = documento;
+        this.email = email;
+        this.telefone = telefone;
+    }
+
+    public Cliente(Long id, String nome, String documento, String email, String telefone) {
+        super(id);
+        this.nome = nome;
+        this.documento = documento;
+        this.email = email;
+        this.telefone = telefone;
+    }
 }
