@@ -4,6 +4,7 @@ import com.ordem.servico.api.dto.ClienteAtualizacaoDTO;
 import com.ordem.servico.api.dto.ClienteCadastroDTO;
 import com.ordem.servico.api.dto.ClienteDetalhesDTO;
 import com.ordem.servico.api.model.Cliente;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -36,5 +37,9 @@ public class ClienteMapper {
                 cliente.getDataCadastro(),
                 cliente.getDataAtualizacao()
         );
+    }
+
+    public Page<ClienteDetalhesDTO> toListagemDTO(Page<Cliente> clientes) {
+        return clientes.map(this::toDetalhesDTO);
     }
 }

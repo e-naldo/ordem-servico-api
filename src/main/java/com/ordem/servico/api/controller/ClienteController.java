@@ -8,6 +8,8 @@ import com.ordem.servico.api.model.Cliente;
 import com.ordem.servico.api.service.ClienteService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -53,5 +55,12 @@ public class ClienteController {
         service.excluirPorId(id);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<ClienteDetalhesDTO>> buscarTodos(Pageable pageable) {
+        Page<Cliente> clientes = service.buscarTodos(pageable);
+
+        return ResponseEntity.ok(mapper.toListagemDTO(clientes));
     }
 }
