@@ -1,9 +1,9 @@
 package com.ordem.servico.api.service;
 
+import com.ordem.servico.api.exception.RecursoJaExistenteException;
+import com.ordem.servico.api.exception.RecursoNaoEncontradoException;
 import com.ordem.servico.api.model.Cliente;
 import com.ordem.servico.api.repository.ClienteRepository;
-import jakarta.persistence.EntityExistsException;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +21,7 @@ public class ClienteService {
     public Cliente cadastrar(Cliente cliente) {
 
         if (verificarClienteExiste(cliente)) {
-            throw new EntityExistsException("Já existe um Cliente cadastrado com o documento "
+            throw new RecursoJaExistenteException("Já existe um Cliente cadastrado com o documento "
                     + cliente.getDocumento());
         }
 
@@ -32,10 +32,10 @@ public class ClienteService {
 
     public Cliente atualizar(Cliente cliente) {
         Cliente clienteAtual = clienteRepository.findById(cliente.getId())
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(RecursoNaoEncontradoException::new);
 
         if (verificarClienteExiste(cliente)) {
-            throw new EntityExistsException("Documento já utilizado por outro Cliente");
+            throw new RecursoJaExistenteException("Documento já utilizado por outro Cliente");
         }
 
         clienteAtual.setNome(cliente.getNome());
@@ -51,7 +51,7 @@ public class ClienteService {
 
     public Cliente buscarPorid(Long id) {
         return clienteRepository.findById(id)
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(RecursoNaoEncontradoException::new);
     }
 
     public void excluirPorId(Long id) {
@@ -64,9 +64,7 @@ public class ClienteService {
 
     public boolean verificarClienteExiste(Cliente cliente) {
         Optional<Cliente> clienteEncontrado = clienteRepository.findByDocumento(cliente.getDocumento());
-        if (clienteEncontrado.isPresent() && !clienteEncontrado.get().getId().equals(cliente.getId())) {
-            return true;
-        }
-        return false;
+
+        return clienteEncontrado.isPresent() && !clienteEncontrado.get().getId().equals(cliente.getId());
     }
 }
